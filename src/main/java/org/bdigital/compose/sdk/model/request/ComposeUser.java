@@ -6,25 +6,24 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.Gson;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ComposeUserAccess extends ComposeUser {
+public class ComposeUser {
 
-    @JsonProperty("password")
-    private String password;
+    @JsonProperty("username")
+    protected String username;
 
     @JsonCreator
-    public ComposeUserAccess(@JsonProperty("username") String username, @JsonProperty("password") String password) {
-	super(username);
-	this.password = password;
+    public ComposeUser(@JsonProperty("username") String username) {
+	this.username = username;
     }
 
-    public String getPassword() {
-	return password;
+    public String getUsername() {
+	return username;
     }
 
-    public void setPassword(String password) {
-	this.password = password;
+    public void setUsername(String username) {
+	this.username = username;
     }
-    
+
     @Override
     public String toString() {
 	return new Gson().toJson(this); 
