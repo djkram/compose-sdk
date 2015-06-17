@@ -24,8 +24,9 @@ public class LCMAPIClientTest {
 
 	ComposeEntities response = lcmapi.getEntities(token);
 
-	System.out.println(response);
 	Assert.assertNotNull(response);
+	Assert.assertNotNull(response.getMetadata());
+	Assert.assertNotNull(response.getData());
     }
 
 }
