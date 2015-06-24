@@ -10,9 +10,9 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.bdigital.compose.sdk.config.ComposeAPICredentials;
 import org.bdigital.compose.sdk.exception.HttpErrorException;
-import org.bdigital.compose.sdk.model.request.ComposeUserAccess;
-import org.bdigital.compose.sdk.model.response.AccessToken;
-import org.bdigital.compose.sdk.model.response.ComposeUserRegistered;
+import org.bdigital.compose.sdk.model.user.ComposeUserAccess;
+import org.bdigital.compose.sdk.model.user.ComposeUserAccessToken;
+import org.bdigital.compose.sdk.model.user.ComposeUserRegistered;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
@@ -36,17 +36,17 @@ public class IDMAPIClient implements IDMAPI {
 
     private static final String AUTHORIZATION = "Authorization";
     private static final String BEARER = "Bearer ";
-    private final String auth_endpoint = "/auth/user/";
-    private final String get_user_endpoint = "/idm/user/";
+    private static final String AUTHORITZATION_ENDPOINT = "/auth/user/";
+    private static final String USER_ENDPOINT = "/idm/user/";
 
-    public AccessToken userAuthoritzation(ComposeUserAccess user) throws HttpErrorException {
+    public ComposeUserAccessToken userAuthoritzation(ComposeUserAccess user) throws HttpErrorException {
 
 	RestTemplate restTemplate = new RestTemplate();
 	restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
 
 	try {
 
-	    ResponseEntity<AccessToken> token = restTemplate.postForEntity(apiCredentials.getIdm_host() + auth_endpoint, user, AccessToken.class);
+	    ResponseEntity<ComposeUserAccessToken> token = restTemplate.postForEntity(apiCredentials.getIdm_host() + AUTHORITZATION_ENDPOINT, user, ComposeUserAccessToken.class);
 
 	    if (!token.getStatusCode().is2xxSuccessful()) {
 		throw new HttpErrorException("HTTP Error - Code: " + token.getStatusCode().value() + " Cause: " + token.getStatusCode().name());
@@ -75,7 +75,7 @@ public class IDMAPIClient implements IDMAPI {
 	restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
 
 	try {
-	    ResponseEntity<ComposeUserRegistered> userResponse = restTemplate.postForEntity(apiCredentials.getIdm_host() + get_user_endpoint, user, ComposeUserRegistered.class);
+	    ResponseEntity<ComposeUserRegistered> userResponse = restTemplate.postForEntity(apiCredentials.getIdm_host() + USER_ENDPOINT, user, ComposeUserRegistered.class);
 	    logger.debug("Code: "+ userResponse.getStatusCode().value() +" Body: "+ userResponse.getBody());
 	    
 	    if (!userResponse.getStatusCode().is2xxSuccessful()) {
@@ -108,7 +108,7 @@ public class IDMAPIClient implements IDMAPI {
 	
 	HttpEntity request = new HttpEntity(headers);
 
-	String url = apiCredentials.getIdm_host() + get_user_endpoint + id;
+	String url = apiCredentials.getIdm_host() + USER_ENDPOINT + id;
 	
 	try {
 	    ResponseEntity<String> userResponse = restTemplate.exchange(url, HttpMethod.DELETE, request, String.class);
@@ -128,7 +128,7 @@ public class IDMAPIClient implements IDMAPI {
 	}
     }
 
-    public ComposeUserRegistered getUserById(AccessToken token, String id) throws HttpErrorException {
+    public ComposeUserRegistered getUserById(ComposeUserAccessToken token, String id) throws HttpErrorException {
 
 	RestTemplate restTemplate = new RestTemplate();
 	restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
@@ -139,7 +139,7 @@ public class IDMAPIClient implements IDMAPI {
 
 	HttpEntity request = new HttpEntity(headers);
 
-	String url = apiCredentials.getIdm_host() + get_user_endpoint + id;
+	String url = apiCredentials.getIdm_host() + USER_ENDPOINT + id;
 
 	try {
 	    ResponseEntity<ComposeUserRegistered> user = restTemplate.exchange(url, HttpMethod.GET, request, ComposeUserRegistered.class);
@@ -158,7 +158,7 @@ public class IDMAPIClient implements IDMAPI {
 
     }
 
-    public ComposeUserRegistered getSelfUser(AccessToken token) throws HttpErrorException {
+    public ComposeUserRegistered getSelfUser(ComposeUserAccessToken token) throws HttpErrorException {
 
 	RestTemplate restTemplate = new RestTemplate();
 	restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
@@ -169,7 +169,7 @@ public class IDMAPIClient implements IDMAPI {
 
 	HttpEntity request = new HttpEntity(headers);
 
-	String url = apiCredentials.getIdm_host() + get_user_endpoint + "info/";
+	String url = apiCredentials.getIdm_host() + USER_ENDPOINT + "info/";
 	try {
 	    ResponseEntity<ComposeUserRegistered> user = restTemplate.exchange(url, HttpMethod.GET, request, ComposeUserRegistered.class);
 

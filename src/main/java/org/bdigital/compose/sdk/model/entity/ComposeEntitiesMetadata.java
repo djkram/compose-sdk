@@ -1,4 +1,4 @@
-package org.bdigital.compose.sdk.model.response;
+package org.bdigital.compose.sdk.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;

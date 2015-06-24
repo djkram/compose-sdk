@@ -1,11 +1,11 @@
-package org.bdigital.compose.sdk.model.response;
+package org.bdigital.compose.sdk.model.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.Gson;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class AccessToken {
+public class ComposeUserAccessToken {
 
     @JsonProperty("accessToken")
     private String accessToken;

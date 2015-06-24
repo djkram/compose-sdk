@@ -4,8 +4,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.bdigital.compose.sdk.config.ComposeAPICredentials;
 import org.bdigital.compose.sdk.exception.HttpErrorException;
-import org.bdigital.compose.sdk.model.response.AccessToken;
-import org.bdigital.compose.sdk.model.response.ComposeEntities;
+import org.bdigital.compose.sdk.model.entity.ComposeEntities;
+import org.bdigital.compose.sdk.model.user.ComposeUserAccessToken;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +30,7 @@ public class LCMAPIClient implements LCMAPI {
 	this.apiCredentials = apiCredentials;
     }
 
-    public ComposeEntities getEntities(AccessToken token) throws HttpErrorException {
+    public ComposeEntities getEntities(ComposeUserAccessToken token) throws HttpErrorException {
 
 	RestTemplate restTemplate = new RestTemplate();
 	restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());

@@ -25,7 +25,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.tika.Tika;
 import org.json.simple.JSONObject;
 
-public class RestClient {
+public class HttpRestClient {
 
 	private static final String AUTHORIZATION = "Authorization";
 	private static final String BEARER = "Bearer ";

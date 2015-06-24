@@ -1,8 +1,6 @@
-package org.bdigital.compose.sdk.model.response;
+package org.bdigital.compose.sdk.model.user;
 
 import java.util.List;
-
-import org.bdigital.compose.sdk.model.request.ComposeUser;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -10,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.Gson;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ComposeUserRegistered extends ComposeUser {
+public class ComposeUserRegistered extends ComposeAbstractUser {
 
     @JsonProperty("id")
     private String id;

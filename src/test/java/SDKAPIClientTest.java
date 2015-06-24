@@ -12,11 +12,15 @@ import org.bdigital.compose.sdk.client.SDKAPI;
 import org.bdigital.compose.sdk.client.SDKAPIClient;
 import org.bdigital.compose.sdk.config.ComposeAPICredentials;
 import org.bdigital.compose.sdk.exception.HttpErrorException;
-import org.bdigital.compose.sdk.model.request.AbstractServiceObject;
-import org.bdigital.compose.sdk.model.request.ComposeUserAccess;
-import org.bdigital.compose.sdk.model.response.AccessToken;
-import org.bdigital.compose.sdk.model.response.ComposeServiceObject;
-import org.bdigital.compose.sdk.utils.RestClient;
+import org.bdigital.compose.sdk.model.serviceobject.ComposeAbstractSOChannelType;
+import org.bdigital.compose.sdk.model.serviceobject.ComposeAbstractSOChannels;
+import org.bdigital.compose.sdk.model.serviceobject.ComposeAbstractSOLocation;
+import org.bdigital.compose.sdk.model.serviceobject.ComposeAbstractSOStreams;
+import org.bdigital.compose.sdk.model.serviceobject.ComposeAbstractServiceObject;
+import org.bdigital.compose.sdk.model.serviceobject.ComposeServiceObjectRegistered;
+import org.bdigital.compose.sdk.model.user.ComposeUserAccess;
+import org.bdigital.compose.sdk.model.user.ComposeUserAccessToken;
+import org.bdigital.compose.sdk.utils.HttpRestClient;
 import org.json.simple.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
@@ -29,19 +33,23 @@ public class SDKAPIClientTest {
 	ComposeAPICredentials apiCredentials = new ComposeAPICredentials();
 	IDMAPI idmapi = new IDMAPIClient(apiCredentials);
 	ComposeUserAccess user = new ComposeUserAccess("test_compose_bdigital", "c6jvUBDV");
-	AccessToken token = idmapi.userAuthoritzation(user);
+	ComposeUserAccessToken token = idmapi.userAuthoritzation(user);
 
 	SDKAPI sdkapi = new SDKAPIClient(apiCredentials);
 
-	AbstractServiceObject<HashMap, HashMap, ArrayList, ArrayList> serviceObject = new AbstractServiceObject<HashMap, HashMap, ArrayList, ArrayList>();
+	ComposeAbstractServiceObject<HashMap, ArrayList, ArrayList> serviceObject = new ComposeAbstractServiceObject<HashMap, ArrayList, ArrayList>();
 	serviceObject.setName("Test Object");
 	serviceObject.setDescription("Test Description");
 	serviceObject.setURL("Web Object URL");
 	serviceObject.setPublic_property("true");
-	serviceObject.setStreams(new HashMap(0));
+	ComposeAbstractSOChannels channels = new ComposeAbstractSOChannels();
+	channels.put("temperature", new ComposeAbstractSOChannelType("Celsius", "number"));
+	serviceObject.addStream("sensor", channels);
 	serviceObject.setCustomFields(new HashMap(0));
 	serviceObject.setActions(new ArrayList(0));
 	serviceObject.setProperties(new ArrayList(0));
+	
+	System.out.println(serviceObject);
 
 	// Map<String, Object> payload = new HashMap<String, Object>();
 	// payload.put("name", "Test Object");
@@ -57,7 +65,7 @@ public class SDKAPIClientTest {
 	// token.getAccessToken());
 	// System.out.println(result[1]);
 
-	ComposeServiceObject response = sdkapi.createServiceObject(token, serviceObject);
+	ComposeServiceObjectRegistered response = sdkapi.createServiceObject(token, serviceObject);
 	Assert.assertNotNull(response);
 	Assert.assertNotNull(response.getId());
 	Assert.assertNotNull(response.getApi_token());

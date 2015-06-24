@@ -4,9 +4,9 @@ import org.bdigital.compose.sdk.client.IDMAPI;
 import org.bdigital.compose.sdk.client.IDMAPIClient;
 import org.bdigital.compose.sdk.config.ComposeAPICredentials;
 import org.bdigital.compose.sdk.exception.HttpErrorException;
-import org.bdigital.compose.sdk.model.request.ComposeUserAccess;
-import org.bdigital.compose.sdk.model.response.AccessToken;
-import org.bdigital.compose.sdk.model.response.ComposeUserRegistered;
+import org.bdigital.compose.sdk.model.user.ComposeUserAccess;
+import org.bdigital.compose.sdk.model.user.ComposeUserAccessToken;
+import org.bdigital.compose.sdk.model.user.ComposeUserRegistered;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -30,7 +30,7 @@ public class IDMAPIClientTest {
 	System.out.println(createResponse);
 	Assert.assertNotNull(createResponse);
 
-	AccessToken token = idmapi.userAuthoritzation(user);
+	ComposeUserAccessToken token = idmapi.userAuthoritzation(user);
 
 	Assert.assertNotNull(token);
 	Assert.assertNotNull(token.getAccessToken());

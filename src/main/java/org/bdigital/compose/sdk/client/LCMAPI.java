@@ -1,10 +1,10 @@
 package org.bdigital.compose.sdk.client;
 
 import org.bdigital.compose.sdk.exception.HttpErrorException;
-import org.bdigital.compose.sdk.model.request.AbstractServiceObject;
-import org.bdigital.compose.sdk.model.response.AccessToken;
-import org.bdigital.compose.sdk.model.response.ComposeEntities;
-import org.bdigital.compose.sdk.model.response.ComposeServiceObject;
+import org.bdigital.compose.sdk.model.entity.ComposeEntities;
+import org.bdigital.compose.sdk.model.serviceobject.ComposeAbstractServiceObject;
+import org.bdigital.compose.sdk.model.serviceobject.ComposeServiceObjectRegistered;
+import org.bdigital.compose.sdk.model.user.ComposeUserAccessToken;
 
 /**
  * API CLient for Compose Life Cycle Manager {@link http://docs.composelifecycle.apiary.io/}
@@ -14,6 +14,6 @@ import org.bdigital.compose.sdk.model.response.ComposeServiceObject;
  */
 public interface LCMAPI {
 
-    public ComposeEntities getEntities(AccessToken token) throws HttpErrorException;
+    public ComposeEntities getEntities(ComposeUserAccessToken token) throws HttpErrorException;
 
 }
