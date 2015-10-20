@@ -15,5 +15,7 @@ import org.bdigital.compose.sdk.model.user.ComposeUserAccessToken;
 public interface LCMAPI {
 
     public ComposeEntities getEntities(ComposeUserAccessToken token) throws HttpErrorException;
+    
+    //public 
 
 }

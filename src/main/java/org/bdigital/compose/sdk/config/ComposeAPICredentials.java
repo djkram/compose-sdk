@@ -11,12 +11,14 @@ public class ComposeAPICredentials {
 	private String idm_host;
 	private String lcm_host;
 	private String sdk_host;
+	private String servioticy_host;
 	
 	/**
 	 * Default API credentials:
 	 * idm_host: http://idm4.147.83.30.133.xip.io
 	 * lcm_host: http://compose-lcm4.147.83.30.133.xip.io
 	 * sdk_host: http://compose-sdk4.147.83.30.133.xip.io
+	 * servioticy_host: http://api.servioticy.com:9090
 	 */
 	public ComposeAPICredentials(){
 		super();
@@ -24,6 +26,7 @@ public class ComposeAPICredentials {
 		this.idm_host = "http://idm4." + host;
 		this.lcm_host = "http://compose-lcm4." + host;
 		this.sdk_host = "http://compose-sdk4." + host; 
+		this.servioticy_host = "http://api.servioticy.com:9090";
 	}
 	
 	/**
@@ -83,6 +86,14 @@ public class ComposeAPICredentials {
 	}
 	public void setSdk_host(String sdk_host) {
 		this.sdk_host = sdk_host;
+	}
+
+	public String getServioticy_host() {
+	    return servioticy_host;
+	}
+
+	public void setServioticy_host(String servioticy_host) {
+	    this.servioticy_host = servioticy_host;
 	}
 	
 }

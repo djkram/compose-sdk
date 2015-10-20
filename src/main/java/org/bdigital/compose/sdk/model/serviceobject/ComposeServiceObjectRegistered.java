@@ -2,6 +2,8 @@ package org.bdigital.compose.sdk.model.serviceobject;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -40,7 +42,15 @@ public class ComposeServiceObjectRegistered {
 
     @Override
     public String toString() {
-	return new Gson().toJson(this);
+	String json = "";
+	ObjectMapper mapper = new ObjectMapper();
+	try {
+	    json = mapper.writeValueAsString(this);
+	} catch (JsonProcessingException e) {
+	    json = super.toString();
+	}
+
+	return json;
     }
 
 }

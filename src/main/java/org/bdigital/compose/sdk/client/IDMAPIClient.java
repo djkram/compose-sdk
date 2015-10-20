@@ -38,6 +38,7 @@ public class IDMAPIClient implements IDMAPI {
     private static final String BEARER = "Bearer ";
     private static final String AUTHORITZATION_ENDPOINT = "/auth/user/";
     private static final String USER_ENDPOINT = "/idm/user/";
+    private static final String API_TOKEN_ENDPOINT = "/idm/serviceobject/";
 
     public ComposeUserAccessToken userAuthoritzation(ComposeUserAccess user) throws HttpErrorException {
 
@@ -183,6 +184,34 @@ public class IDMAPIClient implements IDMAPI {
 	    logger.warn(message);
 	    throw new HttpErrorException(message, e);
 	}
+    }
+
+    public String getApiToken(ComposeUserAccessToken token, String soId) throws HttpErrorException {
+
+	RestTemplate restTemplate = new RestTemplate();
+	restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+
+	MultiValueMap<String, String> headers = new LinkedMultiValueMap<String, String>();
+	headers.add(AUTHORIZATION, BEARER + token.getAccessToken());
+	headers.add("Accept", MediaType.APPLICATION_JSON_VALUE);
+
+	HttpEntity request = new HttpEntity(headers);
+
+	String url = apiCredentials.getIdm_host() + API_TOKEN_ENDPOINT + soId;
+	try {
+	    ResponseEntity<String> user = restTemplate.exchange(url, HttpMethod.GET, request, String.class);
+
+	    if (!user.getStatusCode().is2xxSuccessful()) {
+		throw new HttpErrorException("HTTP Error - Code: " + user.getStatusCode().value() + " Cause: " + user.getStatusCode().name());
+	    }
+
+	    return user.getBody();
+	} catch (HttpStatusCodeException e) {
+	    String message = "HTTP Error - Code: " + e.getStatusCode().value() + " Cause: [" + e.getStatusCode().name() + "] - " + e.getStatusText();
+	    logger.warn(message);
+	    throw new HttpErrorException(message, e);
+	}
+	
     }
 
 }

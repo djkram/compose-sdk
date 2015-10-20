@@ -24,5 +24,8 @@ public interface IDMAPI {
     public ComposeUserRegistered getSelfUser(ComposeUserAccessToken token) throws HttpErrorException;
 
     public void deleteUser(String id, String lastModifiedDateinMillis) throws HttpErrorException;
+    
+    public String getApiToken(ComposeUserAccessToken token, String soId) throws HttpErrorException;
+    
 
 }
