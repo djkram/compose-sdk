@@ -1,12 +1,10 @@
-package org.bdigital.compose.sdk.model.stream;
-
-import org.bdigital.compose.sdk.model.serviceobject.ComposeAbstractSOChannels;
+package org.bdigital.compose.sdk.model.serviceobject.components;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class ComposeUploadStreamData {
+public class ComposeStreamDataUpdate {
 
     @JsonProperty("channels")
     protected ComposeAbstractSOChannels channels;

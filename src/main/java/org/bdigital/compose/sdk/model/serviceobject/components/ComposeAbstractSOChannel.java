@@ -1,4 +1,4 @@
-package org.bdigital.compose.sdk.model.serviceobject;
+package org.bdigital.compose.sdk.model.serviceobject.components;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;

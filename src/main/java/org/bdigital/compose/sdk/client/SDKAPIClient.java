@@ -1,16 +1,14 @@
 package org.bdigital.compose.sdk.client;
 
-import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.bdigital.compose.sdk.config.ComposeAPICredentials;
 import org.bdigital.compose.sdk.exception.HttpErrorException;
-import org.bdigital.compose.sdk.model.serviceobject.ComposeAbstractSOChannels;
 import org.bdigital.compose.sdk.model.serviceobject.ComposeAbstractServiceObject;
-import org.bdigital.compose.sdk.model.serviceobject.ComposeServiceObjectRegistered;
-import org.bdigital.compose.sdk.model.stream.ComposeResponseStreams;
-import org.bdigital.compose.sdk.model.stream.ComposeUploadStreamData;
+import org.bdigital.compose.sdk.model.serviceobject.response.ComposeSORegisteredResponse;
 import org.bdigital.compose.sdk.model.user.ComposeUserAccessToken;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -38,7 +36,7 @@ public class SDKAPIClient implements SDKAPI {
 	this.apiCredentials = apiCredentials;
     }
 
-    public ComposeServiceObjectRegistered createServiceObjectSDK(ComposeUserAccessToken token, ComposeAbstractServiceObject serviceObject) throws HttpErrorException, HttpServerErrorException {
+    public ComposeSORegisteredResponse createServiceObjectSDK(ComposeUserAccessToken token, ComposeAbstractServiceObject serviceObject) throws HttpErrorException, HttpServerErrorException {
 
 	RestTemplate restTemplate = this.getRestTemplate();
 	MultiValueMap<String, String> headers = this.getHeaderFromToken(token);
@@ -48,190 +46,102 @@ public class SDKAPIClient implements SDKAPI {
 	String url = apiCredentials.getSdk_host() + SERVICEOBJECT_ENDPOINT;
 
 	try {
-	    ResponseEntity<ComposeServiceObjectRegistered> response = restTemplate.postForEntity(url, request, ComposeServiceObjectRegistered.class);
-
-	    if (!response.getStatusCode().is2xxSuccessful()) {
-		throw new HttpErrorException("HTTP Error - Code: " + response.getStatusCode().value() + " Cause: " + response.getStatusCode().name());
-	    }
+	    ResponseEntity<ComposeSORegisteredResponse> response = restTemplate.postForEntity(url, request, ComposeSORegisteredResponse.class);
 
 	    return response.getBody();
 
-	} catch (HttpStatusCodeException e ) {
+	} catch (HttpStatusCodeException e) {
 	    String message = "HTTP Error - Code: " + e.getStatusCode().value() + " Cause: [" + e.getStatusCode().name() + "] - " + e.getStatusText();
 	    logger.warn(message);
 	    throw new HttpErrorException(message, e);
 	}
 
     }
-    
-    public String listServiceObjectSDK(ComposeUserAccessToken token) {
+
+    public Set<String> listServiceObjectSDK(ComposeUserAccessToken token) throws HttpErrorException {
 
 	RestTemplate restTemplate = this.getRestTemplate();
 	HttpEntity request = new HttpEntity(this.getHeaderFromToken(token));
 
 	String url = apiCredentials.getSdk_host() + SERVICEOBJECT_ENDPOINT;
-	
-	ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, request, String.class);
-	
-	return response.getBody();
-    }
-    
-    public String getServiceObjectSDK(ComposeUserAccessToken token, String id) {
-	
-	RestTemplate restTemplate = this.getRestTemplate();
-	HttpEntity request = new HttpEntity(this.getHeaderFromToken(token));
-
-	String url = apiCredentials.getSdk_host() + SERVICEOBJECT_ENDPOINT + "/" + id;
-	
-	ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, request, String.class);
-	
-	return response.getBody();
-    }
-    
-    
-    
-    private RestTemplate getRestTemplate(){
-	RestTemplate restTemplate = new RestTemplate();
-	restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-	
-	return restTemplate;
-    }
-    
-    private MultiValueMap<String, String> getHeaderFromToken(ComposeUserAccessToken token){
-	
-	MultiValueMap<String, String> headers = new LinkedMultiValueMap<String, String>();
-	headers.add(AUTHORIZATION, BEARER + token.getAccessToken());
-	headers.add("Accept", MediaType.APPLICATION_JSON_VALUE);
-	
-	return headers;
-	
-    }
-    
-    private MultiValueMap<String, String> getHeaderNBFromToken(ComposeUserAccessToken token){
-	
-	MultiValueMap<String, String> headers = new LinkedMultiValueMap<String, String>();
-	headers.add(AUTHORIZATION, token.getAccessToken());
-	headers.add("Accept", MediaType.APPLICATION_JSON_VALUE);
-	
-	return headers;
-	
-    }
-
-    public ComposeServiceObjectRegistered createServiceObject(ComposeUserAccessToken token, ComposeAbstractServiceObject serviceObject) throws HttpErrorException, HttpServerErrorException {
-    
-        RestTemplate restTemplate = this.getRestTemplate();
-        MultiValueMap<String, String> headers = this.getHeaderNBFromToken(token);
-    
-        HttpEntity<ComposeAbstractServiceObject> request = new HttpEntity<ComposeAbstractServiceObject>(serviceObject, headers);
-    
-        String url = apiCredentials.getServioticy_host() + "/";
-    
-        try {
-            ResponseEntity<ComposeServiceObjectRegistered> response = restTemplate.postForEntity(url, request, ComposeServiceObjectRegistered.class);
-    
-            if (!response.getStatusCode().is2xxSuccessful()) {
-        	throw new HttpErrorException("HTTP Error - Code: " + response.getStatusCode().value() + " Cause: " + response.getStatusCode().name());
-            }
-    
-            return response.getBody();
-    
-        } catch (HttpStatusCodeException e ) {
-            String message = "HTTP Error - Code: " + e.getStatusCode().value() + " Cause: [" + e.getStatusCode().name() + "] - " + e.getStatusText();
-            logger.warn(message);
-            throw new HttpErrorException(message, e);
-        }
-    
-       }
-
-    public ArrayList<String> listServiceObject(ComposeUserAccessToken token) {
-	RestTemplate restTemplate = this.getRestTemplate();
-	HttpEntity request = new HttpEntity(this.getHeaderNBFromToken(token));
-
-	String url = apiCredentials.getServioticy_host() + "/";
-	
-	ResponseEntity<ArrayList> response = restTemplate.exchange(url, HttpMethod.GET, request, ArrayList.class);
-	
-	return response.getBody();
-    }
-
-    public String getServiceObject(ComposeUserAccessToken token, String id) {
-	RestTemplate restTemplate = this.getRestTemplate();
-	HttpEntity request = new HttpEntity(this.getHeaderNBFromToken(token));
-
-	String url = apiCredentials.getServioticy_host() + "/" + id;
-	
-	ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, request, String.class);
-	
-	return response.getBody();
-    }
-
-    public String removeServiceObject(ComposeUserAccessToken token, String id) {
-	RestTemplate restTemplate = this.getRestTemplate();
-	HttpEntity request = new HttpEntity(this.getHeaderNBFromToken(token));
-
-	String url = apiCredentials.getServioticy_host() + "/" + id;
-	
-	ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.DELETE, request, String.class);
-	
-	return response.getBody();
-    }
-
-    public ComposeResponseStreams getServiceObjectStreams(ComposeUserAccessToken token, String id) {
-
-	RestTemplate restTemplate = this.getRestTemplate();
-	HttpEntity request = new HttpEntity(this.getHeaderNBFromToken(token));
-
-	String url = apiCredentials.getServioticy_host() + "/" + id + "/streams";
-	
-	ResponseEntity<String> responseString = restTemplate.exchange(url, HttpMethod.GET, request, String.class);
-	System.out.println(responseString);
-	ResponseEntity<ComposeResponseStreams> response = restTemplate.exchange(url, HttpMethod.GET, request, ComposeResponseStreams.class);
-	
-	return response.getBody();
-	
-    }
-
-    public String uploadDataOnServiceObjectStreams(String token, String soId, String streamId, ComposeUploadStreamData data) throws HttpErrorException {
-
-	RestTemplate restTemplate = this.getRestTemplate();
-	
-	MultiValueMap<String, String> headers = new LinkedMultiValueMap<String, String>();
-	headers.add(AUTHORIZATION, token);
-	headers.add("Accept", MediaType.APPLICATION_JSON_VALUE);
-
-	HttpEntity<ComposeUploadStreamData> request = new HttpEntity<ComposeUploadStreamData>(data, headers);
-
-	String url = apiCredentials.getServioticy_host() + "/" + soId + "/streams/" + streamId;
 
 	try {
-	    ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.PUT, request, String.class);
-		
-	    if (!response.getStatusCode().is2xxSuccessful()) {
-		throw new HttpErrorException("HTTP Error - Code: " + response.getStatusCode().value() + " Cause: " + response.getStatusCode().name());
-	    }
+
+	    ResponseEntity<HashSet> response = restTemplate.exchange(url, HttpMethod.GET, request, HashSet.class);
 
 	    return response.getBody();
 
-	} catch (HttpStatusCodeException e ) {
+	} catch (HttpStatusCodeException e) {
 	    String message = "HTTP Error - Code: " + e.getStatusCode().value() + " Cause: [" + e.getStatusCode().name() + "] - " + e.getStatusText();
 	    logger.warn(message);
 	    throw new HttpErrorException(message, e);
 	}
-	
-	
+
     }
 
-    public String getDataFromServiceObjectStreams(ComposeUserAccessToken token, String soId, String streamId, String timeModifier) {
+    public ComposeSORegisteredResponse getServiceObjectSDK(ComposeUserAccessToken token, String id) throws HttpErrorException {
+
 	RestTemplate restTemplate = this.getRestTemplate();
-	HttpEntity request = new HttpEntity(this.getHeaderNBFromToken(token));
+	HttpEntity request = new HttpEntity(this.getHeaderFromToken(token));
 
-	String url = apiCredentials.getServioticy_host() + "/" + soId + "/streams/" + streamId;
-	
-	ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, request, String.class);
-	
-	return response.getBody();
+	String url = apiCredentials.getSdk_host() + SERVICEOBJECT_ENDPOINT + "/" + id;
+
+	try {
+
+	    ResponseEntity<ComposeSORegisteredResponse> response = restTemplate.exchange(url, HttpMethod.GET, request, ComposeSORegisteredResponse.class);
+
+	    return response.getBody();
+
+	} catch (HttpStatusCodeException e) {
+	    String message = "HTTP Error - Code: " + e.getStatusCode().value() + " Cause: [" + e.getStatusCode().name() + "] - " + e.getStatusText();
+	    logger.warn(message);
+	    throw new HttpErrorException(message, e);
+	}
     }
 
+    public void deleteServiceObjectSDK(ComposeUserAccessToken token, String id) throws HttpErrorException {
+	RestTemplate restTemplate = this.getRestTemplate();
+	HttpEntity request = new HttpEntity(this.getHeaderFromToken(token));
 
+	String url = apiCredentials.getSdk_host() + SERVICEOBJECT_ENDPOINT + "/" + id;
+
+	try {
+
+	    ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.DELETE, request, String.class);
+
+	} catch (HttpStatusCodeException e) {
+	    String message = "HTTP Error - Code: " + e.getStatusCode().value() + " Cause: [" + e.getStatusCode().name() + "] - " + e.getStatusText();
+	    logger.warn(message);
+	    throw new HttpErrorException(message, e);
+	}
+
+    }
+
+    private RestTemplate getRestTemplate() {
+	RestTemplate restTemplate = new RestTemplate();
+	restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+
+	return restTemplate;
+    }
+
+    private MultiValueMap<String, String> getHeaderFromToken(ComposeUserAccessToken token) {
+
+	MultiValueMap<String, String> headers = new LinkedMultiValueMap<String, String>();
+	headers.add(AUTHORIZATION, BEARER + token.getAccessToken());
+	headers.add("Accept", MediaType.APPLICATION_JSON_VALUE);
+
+	return headers;
+
+    }
+
+    private MultiValueMap<String, String> getHeaderNBFromToken(ComposeUserAccessToken token) {
+
+	MultiValueMap<String, String> headers = new LinkedMultiValueMap<String, String>();
+	headers.add(AUTHORIZATION, token.getAccessToken());
+	headers.add("Accept", MediaType.APPLICATION_JSON_VALUE);
+
+	return headers;
+
+    }
 
 }

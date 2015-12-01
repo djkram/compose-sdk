@@ -1,4 +1,4 @@
-package org.bdigital.compose.sdk.model.serviceobject;
+package org.bdigital.compose.sdk.model.serviceobject.response;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -7,7 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ComposeServiceObjectRegistered {
+public class ComposeSORegisteredResponse {
 
     @JsonProperty("id")
     private String id;
@@ -15,6 +15,8 @@ public class ComposeServiceObjectRegistered {
     private String api_token;
     @JsonProperty("createdAt")
     private Long createdAt;
+    @JsonProperty("catalog")
+    private String catalog;
 
     public String getId() {
 	return id;
@@ -38,6 +40,14 @@ public class ComposeServiceObjectRegistered {
 
     public void setCreatedAt(Long createdAt) {
 	this.createdAt = createdAt;
+    }
+
+    public String getCatalog() {
+        return catalog;
+    }
+
+    public void setCatalog(String catalog) {
+        this.catalog = catalog;
     }
 
     @Override

@@ -1,15 +1,15 @@
-package org.bdigital.compose.sdk.model.stream;
+package org.bdigital.compose.sdk.model.serviceobject.response;
 
 import java.util.ArrayList;
 
-import org.bdigital.compose.sdk.model.serviceobject.ComposeAbstractSOStream;
-import org.bdigital.compose.sdk.model.serviceobject.ComposeAbstractSOStreams;
+import org.bdigital.compose.sdk.model.serviceobject.components.ComposeAbstractSOStream;
+import org.bdigital.compose.sdk.model.serviceobject.components.ComposeAbstractSOStreams;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class ComposeResponseStreams {
+public class ComposeSOStreamsResponse {
 
     @JsonProperty("streams")
     protected ArrayList<ComposeAbstractSOStream> streams;

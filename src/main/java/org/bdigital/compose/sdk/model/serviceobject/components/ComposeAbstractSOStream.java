@@ -1,4 +1,4 @@
-package org.bdigital.compose.sdk.model.serviceobject;
+package org.bdigital.compose.sdk.model.serviceobject.components;
 
 import java.util.ArrayList;
 import java.util.List;
