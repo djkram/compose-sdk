@@ -1,8 +1,11 @@
 package org.bdigital.compose.sdk.model.serviceobject;
 
-import java.beans.Transient;
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import org.bdigital.compose.sdk.model.serviceobject.components.ComposeAbstractSOChannels;
+import org.bdigital.compose.sdk.model.serviceobject.components.ComposeAbstractSOStream;
+import org.bdigital.compose.sdk.model.serviceobject.components.ComposeAbstractSOStreams;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -11,10 +14,39 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
- * Abstract model for Compose Service Object. Extend it for modeling adHoc
- * service object.
+ * Abstract JSON model for Compose Service Object. 
+ * Extend it for modeling adHoc service object.
  * 
- * Extend this class to create a Service Object for your Sensor, Gateway or Device
+ * Example:
+ * 
+ * {  
+ *  "name": "Phone", 
+ *  "description": "COMPOSE phone", 
+ *  "URL": "Web Object URL ",
+ *  "public":"true",
+ *  "streams": {
+ *        "location": {
+ *           "channels": {
+ *               "latitude": {
+ *                   "type": "number",
+ *                   "unit": "degrees"
+ *               },
+ *               "longitude": {
+ *                   "type": "number",
+ *                   "unit": "degrees"
+ *               }
+ *           },
+ *           "description": "GPS outdoor location",
+ *           "type": "sensor"
+ *       }
+ *   },
+ *   "customFields": {},
+ *   "actions": [],
+ *   "properties": [],
+ *   "id": "14454346490058a70be39105a4763b0bdc1939f5d00a1",
+ *   "createdAt": 1445434649006,
+ *   "updatedAt": 1445434649006
+ * }
  * 
  * @author mplanaguma <mplanaguma@bdigital.org>
  *
@@ -45,6 +77,7 @@ public class ComposeAbstractServiceObject<C extends HashMap, A extends ArrayList
     @JsonProperty("properties")
     protected P properties;
 
+    
     public ComposeAbstractServiceObject() {
 	super();
     }
@@ -84,71 +117,72 @@ public class ComposeAbstractServiceObject<C extends HashMap, A extends ArrayList
 	this.streams.put(name, stream);
     }
 
-    // Setters
-
+    
+    
     public String getName() {
-	return name;
+        return name;
     }
 
     public void setName(String name) {
-	this.name = name;
+        this.name = name;
     }
 
     public String getDescription() {
-	return description;
+        return description;
     }
 
     public void setDescription(String description) {
-	this.description = description;
+        this.description = description;
     }
 
-    public String getURL() {
-	return url;
+    public String getUrl() {
+        return url;
     }
 
-    public void setURL(String url) {
-	this.url = url;
+    public void setUrl(String url) {
+        this.url = url;
     }
 
-    public String getPublic_property() {
-	return public_;
+    public String getPublic_() {
+        return public_;
     }
 
-    public void setPublic_property(String public_property) {
-	this.public_ = public_property;
+    public void setPublic_(String public_) {
+        this.public_ = public_;
     }
 
     public ComposeAbstractSOStreams getStreams() {
-	return streams;
+        return streams;
     }
 
     public void setStreams(ComposeAbstractSOStreams streams) {
-	this.streams = streams;
+        this.streams = streams;
     }
 
     public C getCustomFields() {
-	return customFields;
+        return customFields;
     }
 
     public void setCustomFields(C customFields) {
-	this.customFields = customFields;
+        this.customFields = customFields;
     }
 
     public A getActions() {
-	return actions;
+        return actions;
     }
 
     public void setActions(A actions) {
-	this.actions = actions;
+        this.actions = actions;
     }
 
     public P getProperties() {
-	return properties;
+        return properties;
     }
 
     public void setProperties(P properties) {
-	this.properties = properties;
+        this.properties = properties;
     }
+
 
     @Override
     public String toString() {
